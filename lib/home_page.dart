@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
+// Entry Point
 void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: CheckIn(),
+    home: CheckIn(username: "user1"), // Pass the username dynamically
   ));
 }
 
+// TimeSlider Widget with attendance saving
 class TimeSlider extends StatefulWidget {
-  const TimeSlider({super.key});
+  final String username;
+  const TimeSlider({super.key, required this.username});
 
   @override
   _TimeSliderState createState() => _TimeSliderState();
@@ -57,6 +62,39 @@ class _TimeSliderState extends State<TimeSlider> {
       _sliderColor = Colors.blue;
       _clockOutTime = DateTime.now();
     });
+
+    // Save attendance after clock out
+    if (_startTime != null && _clockOutTime != null) {
+      saveAttendance(widget.username, _startTime!, _clockOutTime!);
+    }
+  }
+
+  // Save attendance to JSON-server
+  Future<void> saveAttendance(String username, DateTime startTime, DateTime endTime) async {
+    final url = Uri.parse('http://localhost:3000/attendance');
+
+    final body = {
+      "username": username,
+      "checkIn": startTime.toIso8601String(),
+      "checkOut": endTime.toIso8601String(),
+      "durationHours": _currentTime.toStringAsFixed(2)
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 201) {
+        print("Attendance saved successfully: ${response.body}");
+      } else {
+        print("Failed to save attendance: ${response.body}");
+      }
+    } catch (e) {
+      print("Error saving attendance: $e");
+    }
   }
 
   @override
@@ -142,8 +180,10 @@ class _TimeSliderState extends State<TimeSlider> {
   }
 }
 
+// CheckIn Page
 class CheckIn extends StatelessWidget {
-  const CheckIn({super.key});
+  final String username;
+  const CheckIn({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +196,6 @@ class CheckIn extends StatelessWidget {
     final currentDate = dateFormatter.format(now);
     final currentDay = dayFormatter.format(now);
     final currentMonth = monthFormatter.format(now);
-
 
     return Scaffold(
       backgroundColor: Colors.black87,
@@ -204,7 +243,7 @@ class CheckIn extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(child: TimeSlider()),
+            Expanded(child: TimeSlider(username: username)),
           ],
         ),
       ),

@@ -22,27 +22,45 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage>{
   String data = "";
-  Future<bool> signIn(username, password) async {
-    final response = await http.get(Uri.parse('http://localhost:3000/dev/signIn?username=$username&password=$password'));
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      print(jsonData);
-      return true;
-    } else {
-    final jsonData = json.decode(response.body);
-      setState(() {
-        data = jsonData['message']; // Replace 'key' with the key of the data you want
-      });
-    print(json.decode(response.body));
-      throw Exception('Failed to load data');
-    }
-  }
 
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  Future<bool> signIn(String username, String password) async {
+    try {
+      final response = await http.get(Uri.parse('http://localhost:3000/users'));
+      print(response);
+      if (response.statusCode == 200) {
+        final users = json.decode(response.body);
 
-  String errorMessage = '';
+        final user = users.firstWhere(
+              (u) =>
+          u['username'] == username && u['password'] == password,
+          orElse: () => null,
+        );
+
+        if (user != null) {
+          print("SignIn Success: $user");
+          return true;
+        } else {
+          setState(() {
+            data = "Invalid username or password";
+          });
+          return false;
+        }
+      } else {
+        setState(() {
+          data = "Failed to fetch users";
+        });
+        return false;
+      }
+    } catch (e) {
+      setState(() {
+        data = "Error: $e";
+      });
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +90,23 @@ class _SignInPageState extends State<SignInPage>{
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                // String username = usernameController.text;
-                // String password = passwordController.text;
-                // bool ans = await  signIn(username, password);
-                bool ans= true;
+                String username = usernameController.text;
+                String password = passwordController.text;
+
+                if (username.isEmpty || password.isEmpty) {
+                  setState(() {
+                    data = "Please fill in all fields";
+                  });
+                  return;
+                }
+
+
+                bool ans = await  signIn(username, password);
+                print(ans);
                 if (ans) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CheckIn()),
+                    MaterialPageRoute(builder: (context) => CheckIn(username: username)),
                   );
                 };
               },

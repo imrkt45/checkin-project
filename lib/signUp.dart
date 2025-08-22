@@ -14,27 +14,93 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
 
   String data = "";
-  Future<bool> signUp(username, password, email) async {
-    final response = await http.get(Uri.parse('http://localhost:3000/dev/signUp?username=$username&password=$password&email=$email'));
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      print(jsonData);
-      return true;
-    } else {
-      final jsonData = json.decode(response.body);
-      setState(() {
-        data = jsonData['message']; // Replace 'key' with the key of the data you want
-      });
-      print(json.decode(response.body));
-      throw Exception('Failed to load data');
-    }
-  }
-
-
+  String errorMessage ="";
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  String errorMessage ="";
+
+  // Future<bool> signUp(String username, String password, String email) async {
+  //   final url = Uri.parse("http://localhost:3000/users"); // json-server users API
+  //
+  //   final response = await http.post(
+  //     url,
+  //     headers: {"Content-Type": "application/json"},
+  //     body: jsonEncode({
+  //       "username": username,
+  //       "password": password,
+  //       "email": email,
+  //       "checkIn": null,
+  //       "checkOut": null
+  //     }),
+  //   );
+  //
+  //   if (response.statusCode == 201) {
+  //     final jsonData = json.decode(response.body);
+  //     print("User created: $jsonData");
+  //     return true;
+  //   } else {
+  //     setState(() {
+  //       data = "Error: ${response.body}";
+  //     });
+  //     print("Failed: ${response.body}");
+  //     return false;
+  //   }
+  // }
+
+
+
+  Future<bool> signUp(String username, String password, String email) async {
+    final url = Uri.parse("http://localhost:3000/users"); // json-server users API
+
+    final existingResponse = await http.get(url);
+    if (existingResponse.statusCode == 200) {
+      final List users = json.decode(existingResponse.body);
+
+      final usernameExists =
+      users.any((u) => u['username'].toString().toLowerCase() == username.toLowerCase());
+      final emailExists =
+      users.any((u) => u['email'].toString().toLowerCase() == email.toLowerCase());
+
+      if (usernameExists || emailExists) {
+        setState(() {
+          data = usernameExists
+              ? "Username already exists"
+              : "Email already exists";
+        });
+        return false;
+      }
+    } else {
+      setState(() {
+        data = "Failed to fetch existing users";
+      });
+      return false;
+    }
+
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "username": username,
+        "password": password,
+        "email": email,
+        "checkIn": null,
+        "checkOut": null
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      final jsonData = json.decode(response.body);
+      print("User created: $jsonData");
+      return true;
+    } else {
+      setState(() {
+        data = "Error: ${response.body}";
+      });
+      print("Failed: ${response.body}");
+      return false;
+    }
+  }
+
 
 
   @override
