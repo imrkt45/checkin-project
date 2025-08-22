@@ -82,9 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
       body: jsonEncode({
         "username": username,
         "password": password,
-        "email": email,
-        "checkIn": null,
-        "checkOut": null
+        "email": email
       }),
     );
 

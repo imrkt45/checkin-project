@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'AdminPage.dart';
 
 // Entry Point
 void main() {
@@ -205,6 +206,17 @@ class CheckIn extends StatelessWidget {
           'Check In/Check Out',
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.dashboard, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  AdminPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),

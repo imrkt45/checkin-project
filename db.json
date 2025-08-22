@@ -13,6 +13,12 @@
       "email": "raj123@gmail.com",
       "checkIn": null,
       "checkOut": null
+    },
+    {
+      "id": "9ea1",
+      "username": "newn",
+      "password": "8907",
+      "email": "hello@gmail.com"
     }
   ],
   "attendance": [
