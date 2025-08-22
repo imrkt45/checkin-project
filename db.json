@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "raj",
+      "password": "1234",
+      "email": "raj@example.com"
+    },
+    {
+      "id": "7934",
+      "username": "newone12",
+      "password": "1234",
+      "email": "raj123@gmail.com",
+      "checkIn": null,
+      "checkOut": null
+    }
+  ],
+  "attendance": [
+    {
+      "id": "1",
+      "userId": 1,
+      "checkIn": "2025-08-22T09:00:00",
+      "checkOut": "2025-08-22T17:00:00"
+    },
+    {
+      "id": "7f40",
+      "username": "raj",
+      "checkIn": "2025-08-22T19:59:49.242",
+      "checkOut": "2025-08-22T19:59:59.701",
+      "durationHours": "0.00"
+    },
+    {
+      "id": "0b85",
+      "username": "raj",
+      "checkIn": "2025-08-22T20:06:08.747",
+      "checkOut": "2025-08-22T20:07:13.560",
+      "durationHours": "0.02"
+    },
+    {
+      "id": "e4c1",
+      "username": "raj",
+      "checkIn": "2025-08-22T20:08:57.047",
+      "checkOut": "2025-08-22T20:09:06.161",
+      "durationHours": "0.00"
+    }
+  ]
+}
