@@ -19,6 +19,24 @@
       "username": "newn",
       "password": "8907",
       "email": "hello@gmail.com"
+    },
+    {
+      "id": "b5c5",
+      "username": "imrkt234312",
+      "password": "rewrwer",
+      "email": "heloo123@gmail.com"
+    },
+    {
+      "id": "4505",
+      "username": "",
+      "password": "rewrwer",
+      "email": ""
+    },
+    {
+      "id": "3698",
+      "username": "sdfs",
+      "password": "dfdsf",
+      "email": "dds"
     }
   ],
   "attendance": [
@@ -75,6 +93,13 @@
       "username": "newn",
       "checkIn": "2025-08-22T21:02:12.800",
       "checkOut": "2025-08-22T21:02:22.284",
+      "durationHours": "0.00"
+    },
+    {
+      "id": "859b",
+      "username": "newone12",
+      "checkIn": "2025-08-23T14:05:15.761",
+      "checkOut": "2025-08-23T14:05:17.233",
       "durationHours": "0.00"
     }
   ]

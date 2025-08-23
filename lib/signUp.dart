@@ -51,7 +51,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<bool> signUp(String username, String password, String email) async {
     final url = Uri.parse("http://localhost:3000/users"); // json-server users API
-
     final existingResponse = await http.get(url);
     if (existingResponse.statusCode == 200) {
       final List users = json.decode(existingResponse.body);
@@ -137,8 +136,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 String email = emailController.text;
                 if(username.isEmpty || password.isEmpty || email.isEmpty){
                   setState(() {
-                    errorMessage = 'Please fill in all the fields';
+                    data = 'Please fill in all the fields';
                   });
+                  return;
                 } else{
                   setState(() {
                     errorMessage=data;
